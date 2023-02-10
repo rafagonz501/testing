@@ -32,20 +32,20 @@ public class Database : MonoBehaviour
 
         if (hs_post.error != null)
         {
-            print("There was an error posting the high score: " + hs_post.error);
+            print("There was an error establishing connection: " + hs_post.error);
         }
     }
 
     
     IEnumerator GetScores()
     {
-        statusText.text = "Loading Scores";
+        statusText.text = "Establishing connection...";
         WWW hs_get = new WWW(highscoreURL);
         yield return hs_get;
 
         if (hs_get.error != null)
         {
-            print("There was an error getting the high score: " + hs_get.error);
+            print("There was an error establishig connection: " + hs_get.error);
         }
         else
         {

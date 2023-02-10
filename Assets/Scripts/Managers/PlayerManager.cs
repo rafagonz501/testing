@@ -33,6 +33,30 @@ public class PlayerManager : MonoBehaviour
         player.energy -= energyCost;
         UIManager.instance.UpdateValues(players[0], players[1]);
     }
+    public void AddPower(int ID, int power)
+    {
+        Player player = FindPlayerByID(ID);
+        player.power += power;
+        UIManager.instance.UpdateValues(players[0], players[1]);
+    }
+    public void AddLinePower(int ID, int power)
+    {
+        Player player = FindPlayerByID(ID);
+        player.linePower += power;
+        UIManager.instance.UpdateValues(players[0], players[1]);
+    }
+    public void AddAthPower(int ID, int power)
+    {
+        Player player = FindPlayerByID(ID);
+        player.athPower += power;
+        UIManager.instance.UpdateValues(players[0], players[1]);
+    }
+    public void AddDmPower(int ID, int power)
+    {
+        Player player = FindPlayerByID(ID);
+        player.dmPower += power;
+        UIManager.instance.UpdateValues(players[0], players[1]);
+    }
     public void MoveYards(int ID, int yardMove)
     {
         Player player = FindPlayerByID(ID);
@@ -58,5 +82,4 @@ public class PlayerManager : MonoBehaviour
         }
         return foundPlayer;
     }
-
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CardManager : MonoBehaviour
 {
@@ -34,44 +35,25 @@ public class CardManager : MonoBehaviour
     private void Start()
     {
         GenerateCards();
-        //FillDecks();
     }
 
-    /* private void FillDecks()
-     {
-         foreach (Card card in cards) if (card.ownerID == 0)
-             {
-                player1Deck.Add(new Card (card));
-             }
-         foreach (Card card in cards) if (card.ownerID == 1)
-             {
-                 player2Deck.Add(new Card(card));
-             }
-     }*/
-
+   
     private void GenerateCards()
-    {
-        /*foreach (int cardIndex in Player1Deck)  <======= Para crear mazos ======>
+    {       
+    foreach (Card card in cards) if (card.ownerID == 0)
         {
             CardController newCard = Instantiate(cardControllerPrefab, player1Hand);
             newCard.transform.localPosition = Vector3.zero;
-            newCard.Initialize(cards[cardIndex], 0);
-        }*/
-
-        foreach (Card card in cards) if (card.ownerID == 0)
-            {
-                CardController newCard = Instantiate(cardControllerPrefab, player1Hand);
-                newCard.transform.localPosition = Vector3.zero;
-                newCard.Initialize(card, 0);
-                player1HandCards.Add(newCard);
-            }
-        foreach (Card card in cards) if (card.ownerID == 1)
-            {
-                CardController newCard = Instantiate(cardControllerPrefab, player2Hand);
-                newCard.transform.localPosition = Vector3.zero;
-                newCard.Initialize(card, 1);
-                player2HandCards.Add(newCard);                
-            }
+            newCard.Initialize(card, 0);
+            player1HandCards.Add(newCard);
+        }
+    foreach (Card card in cards) if (card.ownerID == 1)
+        {
+            CardController newCard = Instantiate(cardControllerPrefab, player2Hand);
+            newCard.transform.localPosition = Vector3.zero;
+            newCard.Initialize(card, 1);
+            player2HandCards.Add(newCard);                
+        }
     }
 
     public void PlayCard(CardController card, int ID)
@@ -104,8 +86,49 @@ public class CardManager : MonoBehaviour
         {
             AddToHand(player2Hand, 1);
         }
-        
+    }
 
+    public void ProcessStartLayers()  //Compare cards on Layers 1, 2 and 3, take tactic difference into account, create structure for abilities
+    {
+      
+       
+    }
+    private int CheckPosition(string type)//Checks layer of all players
+    {
+        string cardName = "k";
+        foreach (Transform child in player1PlayLeft.transform)
+        {
+            cardName = child.name;
+        }
+
+        if (cardName == type)
+        {
+            int power = int.Parse(UIManager.instance.player1LinePower.text);
+            return power;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    private int AddPositionPower(GameObject position)
+    {
+        string cardName;
+        foreach (Transform child in position.transform)
+        {           
+            cardName = child.name;
+        }
+
+        CheckPosition( "Line");
+        CheckPosition( "Line");
+
+        CheckPosition( "Ath");
+        CheckPosition( "Ath");
+
+        CheckPosition("Dm");
+        CheckPosition("Dm");
+        return 0;
     }
 
     private void AddToHand(Transform playerHand, int ID)

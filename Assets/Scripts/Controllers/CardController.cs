@@ -20,6 +20,10 @@ public class CardController : MonoBehaviour,
         originalParent;
     public List<int>
         powerList = new List<int>();
+    public int
+        linePower = 0, athPower = 0, dmPower = 0; 
+        
+    
 
     public void Initialize(Card card, int ownerID)
     {
@@ -69,28 +73,39 @@ public class CardController : MonoBehaviour,
     }
     private void AnalyzePointerUp(PointerEventData eventData)
     {
-        //---LEFT---//        
+        //---LEFT/L---//        
         if (eventData.pointerEnter != null &&
             eventData.pointerEnter.name == $"Player{card.ownerID + 1}PlayL" &&
             card.cardPosition == "Left")
         {
             PlayCardPosition(eventData);
+            PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
+            PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
+            linePower += card.cardPower;
         }
 
-        //---CENTER---//
+        //---CENTER/ATH---//
         else if (eventData.pointerEnter != null &&
             eventData.pointerEnter.name == $"Player{card.ownerID + 1}PlayC" &&
             card.cardPosition == "Center")
         {
             PlayCardPosition(eventData);
+            PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
+            PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
+            athPower += card.cardPower;
+
         }
 
-        //---RIGHT---//
+        //---RIGHT/DM---//
         else if (eventData.pointerEnter != null &&
             eventData.pointerEnter.name == $"Player{card.ownerID + 1}PlayR" &&
             card.cardPosition == "Right")
         {
             PlayCardPosition(eventData);
+            PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
+            PlayerManager.instance.AddDmPower(card.ownerID, card.cardPower);
+            dmPower += card.cardPower;
+
         }
         else
             ReturnToHand();
@@ -103,7 +118,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCard(eventD.pointerEnter.transform);
             card.isPlayed = true;
-            PlayerManager.instance.SpendEnergy(card.ownerID, card.energyCost);
+            PlayerManager.instance.SpendEnergy(card.ownerID, card.energyCost);            
             PlayerManager.instance.FindPlayerByID(card.ownerID).playedCard = true;
         }
         else
