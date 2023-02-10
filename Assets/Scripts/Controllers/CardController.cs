@@ -155,12 +155,12 @@ public class CardController : MonoBehaviour,
 
     public void CompareCards()
     {
-        if (PlayerManager.instance.FindPlayerByID(0).playedCard && PlayerManager.instance.FindPlayerByID(1).playedCard)
+        /*if (PlayerManager.instance.FindPlayerByID(0).playedCard && PlayerManager.instance.FindPlayerByID(1).playedCard)
         {
             int player1Power = powerList[0];
             int player2Power = powerList[1];
             Debug.Log($"Player's 1 power is: {player1Power} Player's 2 power is: {player2Power}");
-        }
+        }*/
     }
 
 }
