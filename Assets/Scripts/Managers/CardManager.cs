@@ -74,8 +74,8 @@ public class CardManager : MonoBehaviour
     {
         List<CardController> cards = new List<CardController>();
 
-        cards.AddRange(player1Cards);
-        cards.AddRange(player2Cards);
+        cards.AddRange(player1HandCards);
+        cards.AddRange(player2HandCards);
         
 
         if (player1HandCards.Count <= 5)
@@ -90,45 +90,54 @@ public class CardManager : MonoBehaviour
 
     public void ProcessStartLayers()  //Compare cards on Layers 1, 2 and 3, take tactic difference into account, create structure for abilities
     {
-      
-       
-    }
-    private int CheckPosition(string type)//Checks layer of all players
-    {
-        string cardName = "k";
-        foreach (Transform child in player1PlayLeft.transform)
-        {
-            cardName = child.name;
-        }
+        //tactic comparison
+        //positions on layers
+     
 
-        if (cardName == type)
-        {
-            int power = int.Parse(UIManager.instance.player1LinePower.text);
-            return power;
-        }
+        int l1Difference = CompareLayers(player1PlayLeft, player2PlayLeft);
+        if (l1Difference <= 0)        
+            Debug.Log("Defense stopped attacl");
         else
+            Debug.Log("Attack moves forward");
+       
+
+    }
+    private string CheckPosition(GameObject position)//Get name of cards in positions
+    {
+        string childName = "null";
+        
+        foreach (Transform child in position.transform)
         {
-            return 0;
-        }
+            childName = child.name;
+        }                
+
+        return childName;
     }
 
-    private int AddPositionPower(GameObject position)
+    private int AddPositionPower(GameObject position, List<CardController> playerCards)// Get power from cards
+    {       
+        int power = 0;
+        foreach (CardController card in playerCards)
+        {
+            if (card.name.ToString() == CheckPosition(position)){
+                string number = card.cardPower.text;                
+                power = int.Parse(number);
+
+                return power;
+            }
+        }              
+        return power;
+    }
+
+    private int CompareLayers(GameObject layer1, GameObject layer2)//check layers difference
     {
-        string cardName;
-        foreach (Transform child in position.transform)
-        {           
-            cardName = child.name;
-        }
+        int player1Power = 0;
+        player1Power = AddPositionPower(layer1, player1Cards);  
+        int player2Power = 0;
+        player2Power = AddPositionPower(layer2, player2Cards);
 
-        CheckPosition( "Line");
-        CheckPosition( "Line");
-
-        CheckPosition( "Ath");
-        CheckPosition( "Ath");
-
-        CheckPosition("Dm");
-        CheckPosition("Dm");
-        return 0;
+        int difference = player1Power - player2Power; // missing tactic impact
+        return difference;     
     }
 
     private void AddToHand(Transform playerHand, int ID)
@@ -149,12 +158,12 @@ public class CardManager : MonoBehaviour
         {
             if (player2PlayLeft.transform.childCount > 0)
             {
-                CompareCards();
+                //CompareCards();
             }
         }
     }
 
-    private void CompareCards()
+    /*private void CompareCards()
     {
         int yardsAdvance = 0;
 
@@ -171,5 +180,5 @@ public class CardManager : MonoBehaviour
             }
             Debug.Log($"Mod yards by {yardsAdvance}");
         }
-    }
+    }*/
 }

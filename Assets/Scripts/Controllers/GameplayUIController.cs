@@ -38,7 +38,7 @@ public class GameplayUIController : MonoBehaviour
             player2ready = true;
             if (player1ready && player2ready)
             {
-                TurnManager.instance.EndTurn();
+                TurnManager.instance.StartLayers();
                 player1ready = false;
                 player2ready = false;
             }
