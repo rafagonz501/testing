@@ -24,7 +24,6 @@ public class PlayerManager : MonoBehaviour
         foreach (Player player in players)
         {
             player.myTurn = player.ID == currentPlayerTurn;
-            if (player.myTurn) player.energy = player.energy + 1;
         }
     }
     public void SpendEnergy(int ID, int energyCost)
@@ -81,5 +80,10 @@ public class PlayerManager : MonoBehaviour
                 foundPlayer = player;
         }
         return foundPlayer;
+    }
+
+    internal void AddTacticPower(int ownerID, int tacticPower)
+    {
+       
     }
 }

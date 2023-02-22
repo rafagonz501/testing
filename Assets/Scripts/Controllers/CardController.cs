@@ -15,7 +15,7 @@ public class CardController : MonoBehaviour,
     public Image
         cardSprite, image;
     public TextMeshProUGUI
-        cardName, cardPosition, cardPower, energyCost;
+        cardName, cardPosition, cardPower, stamina, energyCost;
     private Transform
         originalParent;
     public List<int>
@@ -32,6 +32,7 @@ public class CardController : MonoBehaviour,
             ownerID = ownerID
         };
         cardSprite.sprite = card.cardSprite;
+        stamina.text = card.stamina.ToString();
         cardName.text = card.cardName;
         cardPosition.text = card.cardPosition;
         cardPower.text = card.cardPower.ToString();
@@ -46,37 +47,45 @@ public class CardController : MonoBehaviour,
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (originalParent.name == $"Player{card.ownerID + 1}Play") /*|| 
-            TurnManager.instance.currentPlayerTurn != card.ownerID)*/
-        {
-
-        }
-        else
+        if (originalParent.name != $"Player{card.ownerID + 1}Play")
         {
             transform.SetParent(transform.root);
             image.raycastTarget = false;
         }
-
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (originalParent.name == $"Player{card.ownerID + 1}Play") /*|
-            TurnManager.instance.currentPlayerTurn != card.ownerID)*/
-        {
-
-        }
-        else
+        if (originalParent.name != $"Player{card.ownerID + 1}Play")
         {
             image.raycastTarget = true;
-            AnalyzePointerUp(eventData);
+            AnalyzeCards(eventData);
         }
     }
-    private void AnalyzePointerUp(PointerEventData eventData)
+    private void AnalyzeCards(PointerEventData eventData)
     {
-        //---LEFT/L---//        
+        if (card.stamina <= 0) card.cardPower = 0;
+        //---L1---//        
         if (eventData.pointerEnter != null &&
-            eventData.pointerEnter.name == $"Player{card.ownerID + 1}PlayL" &&
-            card.cardPosition == "Left")
+            eventData.pointerEnter.name == $"P{card.ownerID + 1}L1" &&
+            (card.cardPosition == "Flex" || card.cardPosition == "Line"))
+        {
+            PlayCardPosition(eventData);
+            PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
+            PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
+            linePower += card.cardPower;
+        }
+        else if (eventData.pointerEnter != null &&
+           eventData.pointerEnter.name == $"P{card.ownerID + 1}L2" &&
+           (card.cardPosition == "Flex" || card.cardPosition == "Line"))
+        {
+            PlayCardPosition(eventData);
+            PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
+            PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
+            linePower += card.cardPower;
+        }
+        else if (eventData.pointerEnter != null &&
+           eventData.pointerEnter.name == $"P{card.ownerID + 1}L3" &&
+           (card.cardPosition == "Flex" ||card.cardPosition == "Line"))
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
@@ -84,22 +93,41 @@ public class CardController : MonoBehaviour,
             linePower += card.cardPower;
         }
 
-        //---CENTER/ATH---//
+        //---ATH---//
         else if (eventData.pointerEnter != null &&
-            eventData.pointerEnter.name == $"Player{card.ownerID + 1}PlayC" &&
-            card.cardPosition == "Center")
+            eventData.pointerEnter.name == $"P{card.ownerID + 1}Ath1" &&
+            (card.cardPosition == "Flex" || card.cardPosition == "Ath" ))
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
             PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
             athPower += card.cardPower;
+        }        
+        else if (eventData.pointerEnter != null &&
+            eventData.pointerEnter.name == $"P{card.ownerID + 1}Ath2" &&
+            (card.cardPosition == "Flex" || card.cardPosition == "Ath"))
+        {
+            PlayCardPosition(eventData);
+            PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
+            PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
+            athPower += card.cardPower;
+        }
+        //---FLEX---//
 
+        else if (eventData.pointerEnter != null &&
+            eventData.pointerEnter.name == $"P{card.ownerID + 1}Flex" &&
+            (card.cardPosition == "Flex" || card.cardPosition == "Ath" || card.cardPosition == "Line"))
+        {
+            PlayCardPosition(eventData);
+            PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
+            PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
+            athPower += card.cardPower;
         }
 
-        //---RIGHT/DM---//
+        //---DM---//
         else if (eventData.pointerEnter != null &&
-            eventData.pointerEnter.name == $"Player{card.ownerID + 1}PlayR" &&
-            card.cardPosition == "Right")
+            eventData.pointerEnter.name == $"P{card.ownerID + 1}DM" &&
+            card.cardPosition == "DM")
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
@@ -113,30 +141,21 @@ public class CardController : MonoBehaviour,
     }
     public void PlayCardPosition(PointerEventData eventD)
     {
-        if (PlayerManager.instance.FindPlayerByID(card.ownerID).energy >= card.energyCost &&
-            PlayerManager.instance.FindPlayerByID(card.ownerID).playedCard == false)
+        if (PlayerManager.instance.FindPlayerByID(card.ownerID).energy >= card.energyCost /*&&
+            PlayerManager.instance.FindPlayerByID(card.ownerID).playedCard == false*/)
         {
             PlayCard(eventD.pointerEnter.transform);
-            card.isPlayed = true;
-            PlayerManager.instance.SpendEnergy(card.ownerID, card.energyCost);            
-            PlayerManager.instance.FindPlayerByID(card.ownerID).playedCard = true;
+            card.isPlayed = true;           
+            //PlayerManager.instance.FindPlayerByID(card.ownerID).playedCard = true;
         }
         else
             ReturnToHand();
     }
-
-
     private void PlayCard(Transform playArea)
     {
         transform.SetParent(playArea);
-        transform.localPosition = Vector3.zero;
-        //originalParent = playArea;        
-        CardManager.instance.PlayCard(this, card.ownerID);
-        PlayerManager.instance.FindPlayerByID(card.ownerID).playedCard = true;       
-        if(card.ownerID == 0)
-            powerList[0] = PlayerManager.instance.FindPlayerByID(card.ownerID).power;
-        else
-            powerList[1] = PlayerManager.instance.FindPlayerByID(card.ownerID).power;
+        transform.localPosition = Vector3.zero;        
+        CardManager.instance.PlayCard(this, card.ownerID);               
     }
     private void ReturnToHand()
     {
@@ -148,19 +167,7 @@ public class CardController : MonoBehaviour,
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if (card.isPlayed) PlayerManager.instance.FindPlayerByID(card.ownerID).playedCard = false;
         if (transform.parent == originalParent) return;
         transform.position = eventData.position;
-    }
-
-    public void CompareCards()
-    {
-        /*if (PlayerManager.instance.FindPlayerByID(0).playedCard && PlayerManager.instance.FindPlayerByID(1).playedCard)
-        {
-            int player1Power = powerList[0];
-            int player2Power = powerList[1];
-            Debug.Log($"Player's 1 power is: {player1Power} Player's 2 power is: {player2Power}");
-        }*/
-    }
-
+    }  
 }

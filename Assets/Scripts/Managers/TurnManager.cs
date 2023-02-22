@@ -24,17 +24,20 @@ public class TurnManager : MonoBehaviour
     public void StartTurn()
     {
         CardManager.instance.ProcessStartTurn(currentPlayerTurn);
+        TacticManager.instance.ProcessStartTurn(currentPlayerTurn);
         GameplayUIController.instance.UpdateCurrentPlayerTurn(currentPlayerTurn);
         PlayerManager.instance.AssignTurn(currentPlayerTurn);
     }
     public void StartLayers()
     {
         CardManager.instance.ProcessStartLayers();
+        TacticManager.instance.ProcessStartLayers();
         EndTurn();
     }
     public void EndTurn()
     {
         CardManager.instance.ProcessEndTurn();
+        TacticManager.instance.ProcessEndTurn();        
         StartTurn();
     }
 }
