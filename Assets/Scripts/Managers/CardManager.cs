@@ -95,16 +95,17 @@ public class CardManager : MonoBehaviour
         foreach (GameObject position in layer1)
         {
             p1Layer1Power += AddPositionPower(position, p1Cards);
+            Debug.Log(position);
         }
-        Debug.Log(layer1);
 
         layer1.Clear();
         GetP2TacticPositions(p2Tactic, TacticManager.instance.p2Tactics);
         foreach (GameObject position in layer1)
         {
             p2Layer1Power += AddPositionPower(position, p2Cards);
+            Debug.Log(position);
+
         }
-        Debug.Log(layer1);
 
         layer1.Clear();
 

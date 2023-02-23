@@ -13,9 +13,9 @@ public class UIManager : MonoBehaviour
     public GameEndUIController gameEndUI;
     private void Awake()
     {
-        instance = this; 
+        instance = this;
+        Application.targetFrameRate = 60;
     }
-
     public void GameFinished(Player winner)
     {
         gameEndUI.gameObject.SetActive(true);
