@@ -77,36 +77,29 @@ public class CardManager : MonoBehaviour
 
         cards.AddRange(p1HandCards);
         cards.AddRange(p2HandCards);
-        /*  
-          if (p1HandCards.Count <= 5)        
-              AddToHand(p1Hand, 0);     
-
-          if (p2HandCards.Count <= 5)        
-              AddToHand(p2Hand, 1);  */
     }
 
     public void ProcessStartLayers()  //Compare cards on Layers 1, 2 and 3, take tactic difference into account, create structure for abilities
-    {
-        //tactic comparison       
+    {              
         int p1Layer1Power = 0;
         int p2Layer1Power = 0;
-        int l1Difference = 0;
+        int l1Difference = 0;   
+
         GetP1TacticPositions(p1Tactic, TacticManager.instance.p1Tactics);
         foreach (GameObject position in layer1)
         {
-            p1Layer1Power += AddPositionPower(position, p1Cards);
-            Debug.Log(position);
-        }
-
+            p1Layer1Power = p1Layer1Power + AddPositionPower(position, p1Cards);
+        }      
+        Debug.Log(layer1);
         layer1.Clear();
-        GetP2TacticPositions(p2Tactic, TacticManager.instance.p2Tactics);
+        
+
+        GetP2TacticPositions(p2Tactic, TacticManager.instance.p2Tactics);     
         foreach (GameObject position in layer1)
         {
-            p2Layer1Power += AddPositionPower(position, p2Cards);
-            Debug.Log(position);
-
+            p2Layer1Power = p2Layer1Power + AddPositionPower(position, p2Cards);
         }
-
+        Debug.Log(layer1);
         layer1.Clear();
 
         l1Difference = p1Layer1Power - p2Layer1Power;
@@ -115,9 +108,7 @@ public class CardManager : MonoBehaviour
         Debug.Log(l1Difference);
 
 
-        int p1TacticPower = AddTacticPower(p1Tactic, TacticManager.instance.p1Tactics);
-        int p2TacticPower = AddTacticPower(p2Tactic, TacticManager.instance.p2Tactics);
-        int tacticDifference = p1TacticPower - p2TacticPower;
+       
 
 
 
@@ -160,8 +151,9 @@ public class CardManager : MonoBehaviour
     {
         int power = 0;
         foreach (CardController card in playerCards)
-        {
-            if (card.name.ToString() == CheckPosition(position)){
+        {      
+            if (card.name.ToString() == CheckPosition(position))
+            {
                 string pNumber = card.cardPower.text;
                 power = int.Parse(pNumber);
                 string stamina = card.stamina.text;
@@ -169,6 +161,7 @@ public class CardManager : MonoBehaviour
                 if (position == null) power = 0;
                 return power;
             }
+           
         }
         return power;
     }
@@ -234,10 +227,8 @@ public class CardManager : MonoBehaviour
     public void GetP1TacticPositions(GameObject position, List<TacticController> tactics)
     {
         foreach (TacticController tactic in tactics)
-        {
-            if (tactic.name == CheckPosition(position))
-            {
-                string layer = tactic.layerID.text; //change layerID for name as it will be clearer to read the switch
+        {                                
+            string layer = tactic.layerID.text; //change layerID for name as it will be clearer to read the switch
 
                 switch (layer)
                 {
@@ -333,15 +324,12 @@ public class CardManager : MonoBehaviour
                         layer2.Add(p1DM);
                         break;
                 }
-            }
         }
     }
     public void GetP2TacticPositions(GameObject position, List<TacticController> tactics)
     {
         foreach (TacticController tactic in tactics)
         {
-            if (tactic.name == CheckPosition(position))
-            {
                 string layer = tactic.layerID.text; //change layerID for name as it will be clearer to read the switch
 
                 switch (layer)
@@ -437,8 +425,7 @@ public class CardManager : MonoBehaviour
                         layer2.Add(p2Flex);
                         layer2.Add(p2DM);
                         break;
-                }
-            }
+                }          
         }
     }
 }

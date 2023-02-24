@@ -78,29 +78,15 @@ public class TacticManager : MonoBehaviour
         int tacticDifference = 0;
         tacticDifference = CompareLayers(p1Tactic, p2Tactic);       
     }
-    private string CheckPosition(GameObject position)
-    {
-        string childName = "null";
-
-        foreach (Transform child in position.transform)
-        {
-            childName = child.name;
-        }
-
-        return childName;
-    }
-
+       
     private int AddPositionPower(GameObject position, List<TacticController> playerTactics)
     {
         int power = 0;
         foreach (TacticController tactic in playerTactics)
-        {
-            if (tactic.name.ToString() == CheckPosition(position))
-            {
-                string number = tactic.tacticPower.text;
-                power = int.Parse(number);
-                return power;
-            }
+        {            
+            string number = tactic.tacticPower.text;
+            power = int.Parse(number);
+            return power;            
         }
         return power;
     }
@@ -114,20 +100,7 @@ public class TacticManager : MonoBehaviour
 
         int difference = player1Power - player2Power;
         return difference;
-    }
-
-    private void AddToHand(Transform playerHand, int ID)
-    {
-        int RandomTactic = UnityEngine.Random.Range(0, this.tactics.Count);
-        TacticController newTactic = Instantiate(tacticPrefab, playerHand);
-        newTactic.transform.localPosition = Vector3.zero;
-        newTactic.Initialize(this.tactics[RandomTactic], ID);
-        if (ID == 0)
-            p1HandTactics.Add(newTactic);
-        else
-            p2HandTactics.Add(newTactic);
-    }
-
+    }   
     public void ProcessEndTurn()
     {
         if (p1Tactic.transform.childCount > 0 )
