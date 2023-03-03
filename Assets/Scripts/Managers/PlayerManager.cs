@@ -23,7 +23,16 @@ public class PlayerManager : MonoBehaviour
     {
         foreach (Player player in players)
         {
-            player.myTurn = player.ID == currentPlayerTurn;
+            if (player.ID == currentPlayerTurn) player.isOffense = true;
+            else player.isOffense = false;
+        }
+    }
+    public void SwitchPossesion(int currentPlayerTurn)
+    {
+        foreach (Player player in players)
+        {
+            if (player.ID == currentPlayerTurn) player.isOffense = false;
+            else player.isOffense = true;
         }
     }
     public void SpendEnergy(int ID, int energyCost)
@@ -32,38 +41,47 @@ public class PlayerManager : MonoBehaviour
         player.energy -= energyCost;
         UIManager.instance.UpdateValues(players[0], players[1]);
     }
+    public void AddEnergy(int ID, int energyCost)
+    {
+        Player player = FindPlayerByID(ID);
+        player.energy += energyCost;
+        UIManager.instance.UpdateValues(players[0], players[1]);
+    }
     public void AddPower(int ID, int power)
     {
         Player player = FindPlayerByID(ID);
         player.power += power;
         UIManager.instance.UpdateValues(players[0], players[1]);
     }
-    public void AddLinePower(int ID, int power)
+    public void RemovePower(int ID, int power)
     {
         Player player = FindPlayerByID(ID);
-        player.linePower += power;
+        player.power -= power;
         UIManager.instance.UpdateValues(players[0], players[1]);
     }
-    public void AddAthPower(int ID, int power)
+    /* public void AddLinePower(int ID, int power)
+     {
+         Player player = FindPlayerByID(ID);
+         player.linePower += power;
+         UIManager.instance.UpdateValues(players[0], players[1]);
+     }
+     public void AddAthPower(int ID, int power)
+     {
+         Player player = FindPlayerByID(ID);
+         player.athPower += power;
+         UIManager.instance.UpdateValues(players[0], players[1]);
+     }
+     public void AddDmPower(int ID, int power)
+     {
+         Player player = FindPlayerByID(ID);
+         player.dmPower += power;
+         UIManager.instance.UpdateValues(players[0], players[1]);
+     }*/
+    public void AdvanceYards(int ID, int yardMove)
     {
         Player player = FindPlayerByID(ID);
-        player.athPower += power;
+        player.yards += yardMove;
         UIManager.instance.UpdateValues(players[0], players[1]);
-    }
-    public void AddDmPower(int ID, int power)
-    {
-        Player player = FindPlayerByID(ID);
-        player.dmPower += power;
-        UIManager.instance.UpdateValues(players[0], players[1]);
-    }
-    public void MoveYards(int ID, int yardMove)
-    {
-        Player player = FindPlayerByID(ID);
-        player.yards -= yardMove;
-        if (player.yards <= 0)
-        {
-            PlayerLost(ID);
-        }
     }
 
     private void PlayerLost(int ID)

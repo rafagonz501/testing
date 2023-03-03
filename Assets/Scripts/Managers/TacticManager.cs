@@ -64,6 +64,20 @@ public class TacticManager : MonoBehaviour
             p2HandTactics.Remove(tactic);
         }
     }
+    public void ReturnToHand(TacticController tactic, int ID)
+    {
+        if (ID == 0)
+        {
+            p1Tactics.Remove(tactic);
+            p1HandTactics.Add(tactic);
+        }
+        else
+        {
+            p2Tactics.Remove(tactic);
+            p2HandTactics.Add(tactic);
+        }
+    }
+
 
     public void ProcessStartTurn(int ID)
     {
@@ -75,8 +89,7 @@ public class TacticManager : MonoBehaviour
 
     public void ProcessStartLayers() 
     {            
-        int tacticDifference = 0;
-        tacticDifference = CompareLayers(p1Tactic, p2Tactic);       
+            
     }
        
     private int AddPositionPower(GameObject position, List<TacticController> playerTactics)

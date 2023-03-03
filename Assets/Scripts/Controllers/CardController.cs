@@ -17,13 +17,7 @@ public class CardController : MonoBehaviour,
     public TextMeshProUGUI
         cardName, cardPosition, cardPower, stamina, energyCost;
     private Transform
-        originalParent;
-    public List<int>
-        powerList = new List<int>();
-    public int
-        linePower = 0, athPower = 0, dmPower = 0; 
-        
-    
+        originalParent; 
 
     public void Initialize(Card card, int ownerID)
     {
@@ -33,8 +27,8 @@ public class CardController : MonoBehaviour,
         };
         cardSprite.sprite = card.cardSprite;
         stamina.text = card.stamina.ToString();
-        cardName.text = card.cardName;
-        cardPosition.text = card.cardPosition;
+        cardName.text = card.cardName.ToString();
+        cardPosition.text = card.cardPosition.ToString();
         cardPower.text = card.cardPower.ToString();
         energyCost.text = card.energyCost.ToString();
         originalParent = transform.parent;
@@ -42,8 +36,6 @@ public class CardController : MonoBehaviour,
     private void Awake()
     {
         image = GetComponent<Image>();
-        powerList.Add(0);
-        powerList.Add(0);
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -71,8 +63,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
-            PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
-            linePower += card.cardPower;
+           // PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
         }
         else if (eventData.pointerEnter != null &&
            eventData.pointerEnter.name == $"P{card.ownerID + 1}L2" &&
@@ -80,8 +71,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
-            PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
-            linePower += card.cardPower;
+            //PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
         }
         else if (eventData.pointerEnter != null &&
            eventData.pointerEnter.name == $"P{card.ownerID + 1}L3" &&
@@ -89,8 +79,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
-            PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
-            linePower += card.cardPower;
+            //PlayerManager.instance.AddLinePower(card.ownerID, card.cardPower);
         }
 
         //---ATH---//
@@ -100,8 +89,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
-            PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
-            athPower += card.cardPower;
+            //PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
         }        
         else if (eventData.pointerEnter != null &&
             eventData.pointerEnter.name == $"P{card.ownerID + 1}Ath2" &&
@@ -109,8 +97,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
-            PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
-            athPower += card.cardPower;
+            //PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
         }
         //---FLEX---//
 
@@ -120,8 +107,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
-            PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
-            athPower += card.cardPower;
+            //PlayerManager.instance.AddAthPower(card.ownerID, card.cardPower);
         }
 
         //---DM---//
@@ -131,9 +117,7 @@ public class CardController : MonoBehaviour,
         {
             PlayCardPosition(eventData);
             PlayerManager.instance.AddPower(card.ownerID, card.cardPower);
-            PlayerManager.instance.AddDmPower(card.ownerID, card.cardPower);
-            dmPower += card.cardPower;
-
+            //PlayerManager.instance.AddDmPower(card.ownerID, card.cardPower);
         }
         else
             ReturnToHand();
@@ -162,8 +146,8 @@ public class CardController : MonoBehaviour,
         card.isPlayed = false;
         transform.SetParent(originalParent);
         transform.localPosition = Vector3.zero;
-        powerList.Remove(PlayerManager.instance.FindPlayerByID(card.ownerID).power);
-
+        CardManager.instance.ReturnToHand(this, card.ownerID);
+        PlayerManager.instance.RemovePower(card.ownerID, card.cardPower);
     }
     public void OnDrag(PointerEventData eventData)
     {

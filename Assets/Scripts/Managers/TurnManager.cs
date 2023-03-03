@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class TurnManager : MonoBehaviour
 {
     public static TurnManager instance;
     public int currentPlayerTurn;
+    private int offense = 0;
 
     private void Awake()
     {
@@ -13,7 +15,7 @@ public class TurnManager : MonoBehaviour
     }
     private void Start()
     {
-        StartTurnGameplay(0);
+        StartTurnGameplay(offense);        
     }
     public void StartTurnGameplay(int playerID)
     {
@@ -37,7 +39,14 @@ public class TurnManager : MonoBehaviour
     public void EndTurn()
     {
         CardManager.instance.ProcessEndTurn();
-        TacticManager.instance.ProcessEndTurn();        
+        TacticManager.instance.ProcessEndTurn();
         StartTurn();
     }
+    public void SwitchPossesion()
+    {
+        if (offense == 0) offense = 1;
+        else offense = 0;
+        StartTurnGameplay(offense);
+    }
+   
 }

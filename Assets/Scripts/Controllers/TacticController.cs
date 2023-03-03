@@ -98,14 +98,13 @@ public class TacticController : MonoBehaviour,
         tactic.isPlayed = false;
         transform.SetParent(originalParent);
         transform.localPosition = Vector3.zero;
-        
+        TacticManager.instance.ReturnToHand(this, tactic.ownerID);
+        PlayerManager.instance.RemovePower(tactic.ownerID, tactic.tacticPower);
     }
     public void OnDrag(PointerEventData eventData)
     {
-
         if (tactic.isPlayed) PlayerManager.instance.FindPlayerByID(tactic.ownerID).playedTactic = false;
         if (transform.parent == originalParent) return;
         transform.position = eventData.position;
-
     }
 }
