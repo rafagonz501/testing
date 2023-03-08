@@ -96,7 +96,7 @@ public class CardManager : MonoBehaviour
     {
         if (LayerDifference(layer1) > 0)
         {
-            Debug.Log("offense wins");
+            
             if (LayerDifference(layer2) > 0)
             {
                 Debug.Log("offense wins");
@@ -168,6 +168,7 @@ public class CardManager : MonoBehaviour
             else if (LayerDifference(layer1) <= -9)
             {
                 //if running
+                
                 Fumble();
                 //if passing
                 Interception();
@@ -216,11 +217,13 @@ public class CardManager : MonoBehaviour
 
     private void Fumble()
     {
-        TurnManager.instance.SwitchPossesion();        
+        TurnManager.instance.SwitchPossesion();
+        Debug.Log("display fumble message");
     }
     private void Interception()
-    { 
-        //switch offense and defense if passing play
+    {
+        TurnManager.instance.SwitchPossesion();
+        Debug.Log("display Interception message");
     }
 
     private int AddPositionPower(GameObject position, List<CardController> playerCards)// Get power from cards

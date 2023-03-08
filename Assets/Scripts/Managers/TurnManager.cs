@@ -7,7 +7,7 @@ public class TurnManager : MonoBehaviour
 {
     public static TurnManager instance;
     public int currentPlayerTurn;
-    private int offense = 0;
+    public int offense = 0;
 
     private void Awake()
     {
@@ -44,8 +44,10 @@ public class TurnManager : MonoBehaviour
     }
     public void SwitchPossesion()
     {
+       
         if (offense == 0) offense = 1;
         else offense = 0;
+        PlayerManager.instance.SwitchPossesion(offense);
         StartTurnGameplay(offense);
     }
    

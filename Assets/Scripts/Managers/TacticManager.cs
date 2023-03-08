@@ -114,6 +114,29 @@ public class TacticManager : MonoBehaviour
         int difference = player1Power - player2Power;
         return difference;
     }   
+    public int PlayType()
+    {
+        bool passing;
+        if (TurnManager.instance.offense == 0)
+        {
+            foreach (TacticController tactic in p1Tactics)
+            {
+                if (tactic.tacticType.text == "passing") passing = true;
+                else passing = false;
+                return 0;
+            } 
+        }
+        else if (TurnManager.instance.offense == 1)
+        {
+            foreach (TacticController tactic in p1Tactics)
+            {
+                if (tactic.tacticType.text == "passing") passing = true;
+                else passing = false;
+                return 0;
+            }
+        }
+        return 2;
+    }
     public void ProcessEndTurn()
     {
         if (p1Tactic.transform.childCount > 0 )
